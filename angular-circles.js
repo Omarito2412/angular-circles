@@ -161,16 +161,20 @@
             }));
 
             if (self.text) {
-                self.$watch(function () {
-                    return [
-                        self.value,
-                        self.text(self.value)
-                    ];
-                }, function (newReturned, oldReturned) {
-                    if (!ng.equals(newReturned, oldReturned)) {
-                        debouncedCircleUpdate(true);
-                    }
-                }, true);
+                var getType = {};
+                getType.toString.call(self.text);
+                if(getType === '[object Function]'){
+                    self.$watch(function () {
+                        return [
+                            self.value,
+                            self.text(self.value)
+                        ];
+                    }, function (newReturned, oldReturned) {
+                        if (!ng.equals(newReturned, oldReturned)) {
+                            debouncedCircleUpdate(true);
+                        }
+                    }, true);
+                }
             } else {
                 self.$watch('value', function () {
                     debouncedCircleUpdate();
